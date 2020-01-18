@@ -1,0 +1,33 @@
+type Place =Char
+
+transition :: (Place ,Place)-> Bool
+transition ('A','B') =True
+
+type Path =[Place]
+
+serach ::Place ->Place ->Path
+serach current_point goal_point =depth current_point goal_point []
+
+depth :: Place -> Place ->Path ->Path --現在地とゴール地点、現在までの経路を引数 今まで通った経路が返り値　
+depth cp gp path |cp==gp = gp:path
+                 |otherwise = breadth(reachable cp) gp (cp:path)
+
+breadth :: [Place]->Place -> Path ->Path --ある頂点xに接続する頂点集合Sを考えてSに含まれる頂点vがその先に何もないときは一つ目の分岐にすすむ(つまり、打ち切る)
+breadth [] gp path =[]
+breadth (cp:cps) gp path | null ans =breadth cps gp path
+                         | otherwise =ans
+    where ans =depth cp gp  path
+
+
+allPlaces = "ABCDEFGXYZ"
+reachable ::  Place -> [Place] --cpに接続する頂点の集合でありcp自身は含まない
+reachable cp = reachable' cp allPlaces
+reachable' ::  Place -> [Place] -> [Place]
+reachable' cp [] = []
+reachable' cp (np:nps) | transition (cp, np) = np:reachable' cp nps
+                       | otherwise= reachable' cp nps
+
+
+
+
+
